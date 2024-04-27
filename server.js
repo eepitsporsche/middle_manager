@@ -60,3 +60,18 @@ function appInit() {
         }
     })
 };
+
+
+//View All Employees Function
+function viewAllEmplyees() {
+    mysqlConnection.query(
+        //Pull Data from Employee Table and Attach Respective Manager Data
+        'SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee AS manager ON employee.manager_id = manager_id',
+            (err, res) => {
+                //Throw Error Otherwise, Display Response Results
+                if (err) throw err;
+                console.table(res);
+                appInit();
+            }
+    )
+};
