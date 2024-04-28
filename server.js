@@ -34,6 +34,7 @@ function appInit() {
         'View All Roles',
         'Add Role',
         'View All Departments',
+        'Add Department',
         'Exit'
     ]
     })
@@ -52,6 +53,8 @@ function appInit() {
             case 'Add Role': addRole();
             break;
             case 'View All Departments': viewAllDepartments();
+            break;
+            case 'Add Department': addDepartment();
             break;
             case 'Exit': mysqlConnection.end();
             break;
@@ -145,5 +148,52 @@ function addEmployee() {
                 })
             })
     })
+    })
+};
+
+//Update Employee Role Function
+function updateEmployeeRole() {
+    //Pull Data from Employee Table or Throw Error
+    mysqlConnection.query('SELECT * FROM employee', (err, employee) => {
+        if (err) throw err;
+
+        //Pull Data from Role Table or Throw Error
+        mysqlConnection.query('SELECT * FROM roles', (err, role) => {
+            if (err) throw err;
+
+            //Inquirer Prompts to Update Employee Role
+            inquirer
+                .prompt([
+                    {
+                        name: "employee",
+                        type: "list",
+                        message: "Which employee's role do you want to update?",
+                        choices: employee.map((employee) => `${employee.first_name} ${employee.last_name}`),
+                    },
+                    {
+                        name: "role",
+                        type: "list",
+                        message: "Which role do you want to assign the selected employee?",
+                        choices: role.map((role) => role.title),
+                    },
+                ])
+
+                .then((answers) => {
+                    //Pull Employee Data from Employee Table
+                    const selectedEmployee = employee.find((employee) => `${employee.first_name} ${employee.last_name}` === answers.employee);
+                    //Pull Role Data from Role Table
+                    const selectedRole = role.find((role) => role.title === answers.role);
+
+                    //Update Employee Role Data to Employee Table Via MySql Query
+                    mysqlConnection.query('UPDATE employee SET role_id = ? WHERE id = ?', [selectedRole.id, selectedEmployee.id],
+                        //Display Confirmation Message or Throw Error
+                        (err) => {
+                            if (err) throw err;
+                            console.log("Employee role updated.");
+                            appInit();
+                        }
+                    )
+                })
+        })
     })
 };
