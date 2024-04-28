@@ -197,3 +197,61 @@ function updateEmployeeRole() {
         })
     })
 };
+
+//View All Roles Function
+function viewAllRoles() {
+    //Pull Data from Role Table
+    mysqlConnection.query('SELECT role.id, role.title, role.salary, department.name AS department FROM role INNER JOIN department ON role.department_id = department.id', (err, res) => {
+        //Display Response Results or Throw Error
+        if (err) throw err;
+        console.table(res);
+        appInit();
+    })
+};
+
+//Add Role Function
+function addRole() {
+    //Pull Data from Department Table
+    mysqlConnection.query('SELECT * FROM department', (err, department) => {
+        if (err) throw err;
+
+        //Inquirer Prompts to Add Role
+        inquirer
+            .prompt ([
+                {
+                    name: "title",
+                    type: "input",
+                    message: "What is the name of the role?",
+                },
+                {
+                    name:"salary",
+                    type: "input",
+                    message: "What is the salary of the role?",
+                    validate: (value) => {
+                        if (isNaN(value) === false) {
+                            return true;
+                        }
+                        return "Please enter a valid salary value."
+                    },
+                },
+            ])
+
+            .then((answers) => {
+                //Pull Data From Department Table
+                const selectedDepartment = department.find((department) => department.name === answers.department);
+
+            //Add Role Data to Role Table Via MySql Query
+            mysqlConnection.query("INSERT INTO role SET ?", {
+                title: answers.title,
+                salary: answers.salary,
+                department_id: selectedDepartment.id,
+            },
+                //Display Confirmation Message or Throw Error
+                (err) => {
+                    if (err) throw err;
+                    console.log(`Added ${answers.title} to the database.`)
+                    appInit();
+                })
+            })
+    })
+};
