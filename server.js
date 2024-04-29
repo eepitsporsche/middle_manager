@@ -255,3 +255,39 @@ function addRole() {
             })
     })
 };
+
+//View All Departments Function
+function viewAllDepartments() {
+    //Pull Data from Department Table
+    mysqlConnection.query('SELECT * FROM department', (err, res) => {
+        //Display Response Results or Throw Error
+        if (err) throw err;
+        console.table(res);
+        appInit();
+    })
+};
+
+//Add Department Function
+function addDepartment() {
+    //Inquirer Prompts to Add Department
+    inquirer
+        .prompt (
+            {
+                name: "department",
+                type: "input",
+                message: "What is the name of the department?",
+            }
+        )
+        //Add Department Data to Department Table Via MySql Query
+        .then((answers) => {
+            mysqlConnection.query('INSERT INTO department SET ?', {
+                name: answers.department,
+            },
+            //Display Confirmation Message or Throw Error
+            (err) => {
+                if (err) throw err;
+                console.log(`Added ${answers.department} to the database.`);
+                appInit();
+            })
+        })
+};
