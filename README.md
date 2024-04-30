@@ -18,13 +18,18 @@ Future development for this app would include functions to delete table data and
 
 ## Installation
 * [Inquirer v8.2.4](https://www.npmjs.com/package/inquirer/v/8.2.4) must be installed to operate this app.
+* [MySQL2](https://www.npmjs.com/package/mysql2) must be installed to operate this app.
+* [console.table](https://www.npmjs.com/package/console.table) must be installed to operate this app.
+* [C Fonts](https://www.npmjs.com/package/cfonts) must be installed to operate design functionality of this app.
 
 ## Usage
 [Clone the repository](https://github.com/eepitsporsche/middle_manager) to your machine and open the application in VS Code.
 
 <p align="center"><img src="./assets/images/middle_manager_github_repo.png" alt="Middle Manager GitHub Repo"></p>
 
-To initiate the SVG Logo Generator, enter the <code>node index.js</code> command into the index.js terminal.
+To initiate the Middle Manager, enter the <code>node index.js</code> command into the server.js terminal.
+
+> [!IMPORTANT] Ensure you have installed all dependencies listed under [Installation](#installation) before initiating the program.
 
 <p align="center"><img src="./assets/images/svg_logo_generator_terminal_demo.jpg" alt="SVG Logo Generator Terminal Demo"></p>
 

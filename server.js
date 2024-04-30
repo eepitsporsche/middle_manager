@@ -1,7 +1,25 @@
 //Required Node Modules
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
+const consoleTable = require("console.table");
+const cfonts = require("cfonts");
 
+
+//
+cfonts.say('Middle|Manager', {
+	font: 'block',              // define the font face
+	align: 'center',            // define text alignment
+	colors: ['system'],         // define all colors
+	background: 'transparent',  // define the background color, you can also use `backgroundColor` here as key
+	letterSpacing: 1,           // define letter spacing
+	lineHeight: 1,              // define the line height
+	space: true,                // define if the output text should have empty lines on top and on the bottom
+	maxLength: '0',             // define how many character can be on one line
+	gradient: false,            // define your two gradient colors
+	independentGradient: false, // define if you want to recalculate the gradient for each new line
+	transitionGradient: false,  // define if this is a transition between colors directly
+	env: 'node'                 // define the environment cfonts is being executed in
+});
 
 //MySql Connection Object
 const mysqlConnection = mysql.createConnection({
@@ -69,7 +87,7 @@ function appInit() {
 function viewAllEmplyees() {
     mysqlConnection.query(
         //Pull Data from Employee Table and Attach Respective Manager Data
-        'SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee AS manager ON employee.manager_id = manager_id',
+        'SELECT employees.id, employees.first_name, employees.last_name, roles.title, departments.name AS departments, roles.salary, CONCAT(manager.first_name, " ", manager.last_name) AS manager FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id LEFT JOIN employees AS manager ON employees.manager_id = manager.id',
             (err, res) => {
                 //Display Response Results or Throw Error
                 if (err) throw err;
@@ -83,11 +101,11 @@ function viewAllEmplyees() {
 //Add Employee Function
 function addEmployee() {
     //Pull Role Data from Database
-    mysqlConnection.query('SELECT * FROM role', (err, role) => {
+    mysqlConnection.query('SELECT * FROM roles', (err, roles) => {
         if (err) throw err;
 
     //Pull Employee Data from Database
-    mysqlConnection.query('SELECT * FROM employee', (err, employee) => {
+    mysqlConnection.query('SELECT * FROM employees', (err, employees) => {
         if (err) throw err;
 
         //Inquirer Prompts to Add New Employee Data
@@ -109,7 +127,7 @@ function addEmployee() {
                     name: "role",
                     type: "list",
                     message: "What is the employee's role?",
-                    choices: role.map((role) => role.title)
+                    choices: roles.map((role) => role.title)
                 },
 
                 {
@@ -118,23 +136,23 @@ function addEmployee() {
                     message: "Who is the employee's manager?",
                     choices: [
                         "None",
-                        ...employee.map((employee) => `${employee.first_name} ${employee.last_name}`),
+                        ...employees.map((employees) => `${employees.first_name} ${employees.last_name}`),
                     ]
                 }
             ])
         
             .then((answers) => {
                 //Pull Role Data from Role Table
-                const selectedRole = role.find((role) => role.title === answers.role);
+                const selectedRole = roles.find((role) => role.title === answers.role);
                 
                 //If a Manager is Selected, Pull ID Data from Employee Table for Manager ID
                 let managerID = null;
                 if (answers.manager !== "None") {
-                    const selectedManager = employee.find((employee) => `${employee.first_name} ${employee.last_name}` === answers.manager)
+                    const selectedManager = employees.find((employees) => `${employees.first_name} ${employees.last_name}` === answers.manager)
                 managerID = selectedManager.id;
                 }
                 //Add New Employee Data to Employee Table Via MySql Query
-                mysqlConnection.query("INSERT INTO employee SET ?", {
+                mysqlConnection.query("INSERT INTO employees SET ?", {
                     first_name: answers.firstName,
                     last_name: answers.lastName,
                     role_id: selectedRole.id,
@@ -154,11 +172,11 @@ function addEmployee() {
 //Update Employee Role Function
 function updateEmployeeRole() {
     //Pull Data from Employee Table or Throw Error
-    mysqlConnection.query('SELECT * FROM employee', (err, employee) => {
+    mysqlConnection.query('SELECT * FROM employees', (err, employees) => {
         if (err) throw err;
 
         //Pull Data from Role Table or Throw Error
-        mysqlConnection.query('SELECT * FROM roles', (err, role) => {
+        mysqlConnection.query('SELECT * FROM roles', (err, roles) => {
             if (err) throw err;
 
             //Inquirer Prompts to Update Employee Role
@@ -168,24 +186,24 @@ function updateEmployeeRole() {
                         name: "employee",
                         type: "list",
                         message: "Which employee's role do you want to update?",
-                        choices: employee.map((employee) => `${employee.first_name} ${employee.last_name}`),
+                        choices: employees.map((employees) => `${employees.first_name} ${employees.last_name}`),
                     },
                     {
                         name: "role",
                         type: "list",
                         message: "Which role do you want to assign the selected employee?",
-                        choices: role.map((role) => role.title),
+                        choices: roles.map((role) => role.title),
                     },
                 ])
 
                 .then((answers) => {
                     //Pull Employee Data from Employee Table
-                    const selectedEmployee = employee.find((employee) => `${employee.first_name} ${employee.last_name}` === answers.employee);
+                    const selectedEmployee = employees.find((employees) => `${employees.first_name} ${employees.last_name}` === answers.employee);
                     //Pull Role Data from Role Table
-                    const selectedRole = role.find((role) => role.title === answers.role);
+                    const selectedRole = roles.find((role) => role.title === answers.role);
 
                     //Update Employee Role Data to Employee Table Via MySql Query
-                    mysqlConnection.query('UPDATE employee SET role_id = ? WHERE id = ?', [selectedRole.id, selectedEmployee.id],
+                    mysqlConnection.query('UPDATE employees SET role_id = ? WHERE id = ?', [selectedRole.id, selectedEmployee.id],
                         //Display Confirmation Message or Throw Error
                         (err) => {
                             if (err) throw err;
@@ -201,7 +219,7 @@ function updateEmployeeRole() {
 //View All Roles Function
 function viewAllRoles() {
     //Pull Data from Role Table
-    mysqlConnection.query('SELECT role.id, role.title, role.salary, department.name AS department FROM role INNER JOIN department ON role.department_id = department.id', (err, res) => {
+    mysqlConnection.query('SELECT roles.id, roles.title, roles.salary, departments.name AS departments FROM roles INNER JOIN departments ON roles.department_id = departments.id', (err, res) => {
         //Display Response Results or Throw Error
         if (err) throw err;
         console.table(res);
@@ -212,7 +230,7 @@ function viewAllRoles() {
 //Add Role Function
 function addRole() {
     //Pull Data from Department Table
-    mysqlConnection.query('SELECT * FROM department', (err, department) => {
+    mysqlConnection.query('SELECT * FROM departments', (err, departments) => {
         if (err) throw err;
 
         //Inquirer Prompts to Add Role
@@ -234,14 +252,20 @@ function addRole() {
                         return "Please enter a valid salary value."
                     },
                 },
+                {
+                    name: "department",
+                    type: "list",
+                    message: "In which department does this role belong?",
+                    choices: departments.map((departments) => departments.name),
+                },
             ])
 
             .then((answers) => {
                 //Pull Data From Department Table
-                const selectedDepartment = department.find((department) => department.name === answers.department);
+                const selectedDepartment = departments.find((departments) => departments.name === answers.department);
 
             //Add Role Data to Role Table Via MySql Query
-            mysqlConnection.query("INSERT INTO role SET ?", {
+            mysqlConnection.query("INSERT INTO roles SET ?", {
                 title: answers.title,
                 salary: answers.salary,
                 department_id: selectedDepartment.id,
@@ -259,7 +283,7 @@ function addRole() {
 //View All Departments Function
 function viewAllDepartments() {
     //Pull Data from Department Table
-    mysqlConnection.query('SELECT * FROM department', (err, res) => {
+    mysqlConnection.query('SELECT * FROM departments', (err, res) => {
         //Display Response Results or Throw Error
         if (err) throw err;
         console.table(res);
@@ -280,7 +304,7 @@ function addDepartment() {
         )
         //Add Department Data to Department Table Via MySql Query
         .then((answers) => {
-            mysqlConnection.query('INSERT INTO department SET ?', {
+            mysqlConnection.query('INSERT INTO departments SET ?', {
                 name: answers.department,
             },
             //Display Confirmation Message or Throw Error

@@ -1,5 +1,5 @@
---Department Options--
-INSERT INTO department (id, name)
+-- Department Options --
+INSERT INTO departments (id, name)
 VALUES
     (1, 'Sales'),
     (2, 'Engineering'),
@@ -7,8 +7,8 @@ VALUES
     (4, 'Legal');
 
 
---Role Options--
-INSERT INTO role (id, title, salary, department_id)
+-- Role Options --
+INSERT INTO roles (id, title, salary, department_id)
 VALUES
     (1, 'Sales Lead', 100000, 1),
     (2, 'Salesperson', 80000, 1),
@@ -20,9 +20,9 @@ VALUES
     (8, 'Lawyer', 190000, 4);
 
 
---Employee Options--
-INSERT INTO employee (id, first_name, last_name, role_id, manager_id)
+-- Employee Options --
+INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
 VALUES
-    (1, 'Porsche Herskorn', 1, NULL),
-    (2, 'Jane Doe', 2, 1),
-    (3, 'John Doe', 3, 1);
+    (1, 'Porsche', 'Herskorn', 1, NULL),
+    (2, 'Jane', 'Doe', 2, 1),
+    (3, 'John', 'Smith', 3, 1);
