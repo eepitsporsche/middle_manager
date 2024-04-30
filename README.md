@@ -27,26 +27,26 @@ Future development for this app would include functions to delete table data and
 
 <p align="center"><img src="./assets/images/middle_manager_github_repo.png" alt="Middle Manager GitHub Repo"></p>
 
-To initiate the Middle Manager, enter the <code>node index.js</code> command into the server.js terminal.
+To initiate the Middle Manager, enter the <code>node server.js</code> command into the server.js terminal.
 
 > [!IMPORTANT] Ensure you have installed all dependencies listed under [Installation](#installation) before initiating the program.
 
-<p align="center"><img src="./assets/images/svg_logo_generator_terminal_demo.jpg" alt="SVG Logo Generator Terminal Demo"></p>
+<p align="center"><img src="./assets/images/middle_manager_terminal_demo.png" alt="Middle Manager Terminal Demo"></p>
 
-After answering the prompts, an SVG file entitled "logo.svg" with the user's response parameters applied will be created.
-Opening the file via the live server will allow you to view the generated logo.svg.
+Users may navigate the menu using the up and down arrow keys and pressing enter on the desired selection.
+Options include viewing and adding employees, viewing and adding employee roles, and viewing and adding departments.
 
-<p align="center"><img src="./examples/svg_logo_generator_new_logo.jpg" alt="New logo.svg Created by the SVG Logo Generator"></p>
+<p align="center"><img src="./assets/images/middle_manager_terminal_demo_2.png" alt="Middle Manager Terminal Demo"></p>
 
-To initiate the testing of the SVG Logo Generator, enter the <code>npm test</code> command into the terminal.
-
-<p align="center"><img src="./assets/images/svg_logo_generator_test_demo.jpg" alt="SVG Logo Generator Terminal Test Demo"></p>
-
-> [Click here]() to view the video walk-through.
+> [Click here](https://drive.google.com/file/d/1sHYOx58db81USKxX5GhuHXRw-ijlCflE/view?usp=sharing) to view the video walk-through.
 
 
 ## Credits
-* 
+* [SQL Shack](https://www.sqlshack.com/understanding-sql-decimal-data-type/) for information on data type syntax.
+* [phoenix NAP](https://phoenixnap.com/kb/how-to-create-a-table-in-mysql) for information on MySQL table construction/modification.
+* [Sam Meech-Ward Youtube Channel](https://www.youtube.com/watch?v=Hej48pi_lOc)
+* [Unblock Me YouTube Channel](https://www.youtube.com/watch?v=YW1CXRqF9AA)
+* UCB Bootcamp Instructor: [Robbert Wijtman](https://github.com/Bucky24)
 * UCB Bootcamp provided guidance for database table structure for this project.
 
 
