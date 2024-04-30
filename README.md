@@ -46,7 +46,7 @@ Options include viewing and adding employees, viewing and adding employee roles,
 * [SQL Shack](https://www.sqlshack.com/understanding-sql-decimal-data-type/) for information on data type syntax.
 * [phoenix NAP](https://phoenixnap.com/kb/how-to-create-a-table-in-mysql) for information on MySQL table construction/modification.
 * [Sam Meech-Ward Youtube Channel](https://www.youtube.com/watch?v=Hej48pi_lOc)
-* [Unblock Me YouTube Channel](https://www.youtube.com/watch?v=YW1CXRqF9AA)
+* [unblockMe YouTube Channel](https://www.youtube.com/watch?v=YW1CXRqF9AA)
 * UCB Bootcamp Instructor: [Robbert Wijtman](https://github.com/Bucky24)
 * UCB Bootcamp provided guidance for database table structure for this project.
 
