@@ -29,7 +29,8 @@ Future development for this app would include functions to delete table data and
 
 To initiate the Middle Manager, enter the <code>node server.js</code> command into the server.js terminal.
 
-> [!IMPORTANT] Ensure you have installed all dependencies listed under [Installation](#installation) before initiating the program.
+> [!IMPORTANT]
+ Ensure you have installed all dependencies listed under [Installation](#installation) before initiating the program.
 
 <p align="center"><img src="./assets/images/middle_manager_terminal_demo.png" alt="Middle Manager Terminal Demo"></p>
 
